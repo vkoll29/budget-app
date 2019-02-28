@@ -100,7 +100,8 @@ var UIController = (function() {
     budgetLabel: ".budget__value",
     incomeLabel: ".budget__income--value",
     expensesLabel: ".budget__expenses--value",
-    expPercLabel: ".budget__expenses--percentage"
+    expPercLabel: ".budget__expenses--percentage",
+    container: ".container"
   };
 
   return {
@@ -119,11 +120,11 @@ var UIController = (function() {
       if (type === "inc") {
         el = DOMstrings.incomeContainer;
         html =
-          '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+          '<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       } else if (type === "exp") {
         el = DOMstrings.expensesContainer;
         html =
-          '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+          '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       }
 
       //replace placeholders in html string with some actual data
@@ -177,6 +178,8 @@ var controller = (function(budgetCtrl, UICtrl) {
         ctrlAddItem();
       }
     });
+
+    $(DOM.container).on("click", ctrlDeleteItem);
   };
 
   var updateBudget = function() {
@@ -203,6 +206,27 @@ var controller = (function(budgetCtrl, UICtrl) {
       //5. calculate and update budget
       updateBudget();
     }
+  };
+  var ctrlDeleteItem = function(event) {
+    var itemID, type, ID;
+    //when the split method (or any method) is called on a primitive, javascript converts it to an object so the method can be used on it
+    itemID = event.target.parentNode.parentNode.parentNode.parentNode.id.split(
+      "-"
+    );
+    if (itemID) {
+      type = itemID[0];
+      ID = itemID[1];
+
+      //1. delete the item from the data structure
+
+      //2. delete the item from UI
+
+      //3. update and show the new budget
+    }
+
+    console.log(itemID);
+    console.log(type);
+    console.log(ID);
   };
 
   return {
