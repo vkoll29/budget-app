@@ -148,6 +148,10 @@ var UIController = (function() {
       $(el).append(newHtml);
     },
 
+    removeListItem: function(s) {
+      $("#" + s).remove();
+    },
+
     clearFields: function() {
       var fields, fieldsArr;
       fields = document.querySelectorAll(
@@ -219,20 +223,21 @@ var controller = (function(budgetCtrl, UICtrl) {
     }
   };
   var ctrlDeleteItem = function(event) {
-    var itemID, type, ID;
+    var itemID, splitID, type, ID;
     //when the split method (or any method) is called on a primitive, javascript converts it to an object so the method can be used on it
-    itemID = event.target.parentNode.parentNode.parentNode.parentNode.id.split(
-      "-"
-    );
-    if (itemID) {
-      type = itemID[0];
-      ID = Number(itemID[1]);
+    itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+    splitID = itemID.split("-");
+    if (splitID) {
+      type = splitID[0];
+      ID = Number(splitID[1]);
 
       //1. delete the item from the data structure
       budgetCtrl.deleteItem(type, ID);
       //2. delete the item from UI
+      UICtrl.removeListItem(itemID);
 
       //3. update and show the new budget
+      updateBudget();
     }
   };
 
