@@ -227,7 +227,7 @@ var UIController = (function() {
 
     displayBudget: function(obj) {
       var type;
-      obj.budget > 0 ? (type = "inc") : (type = "exp");
+      obj.budget >= 0 ? (type = "inc") : (type = "exp");
       $(DOMstrings.budgetLabel).text(formatNumber(obj.budget, type));
       $(DOMstrings.incomeLabel).text(formatNumber(obj.totalInc, "inc"));
       $(DOMstrings.expensesLabel).text(formatNumber(obj.totalExp, "exp"));
@@ -276,6 +276,17 @@ var UIController = (function() {
       monthYear = months[month] + ", " + year;
       $(DOMstrings.monthLabel).text(monthYear);
     },
+    changedType: function() {
+      $(
+        DOMstrings.inputType +
+          "," +
+          DOMstrings.inputDescription +
+          "," +
+          DOMstrings.inputValue
+      ).toggleClass("red-focus");
+
+      $(DOMstrings.inputBtn).toggleClass("red");
+    },
     getDOMstrings: function() {
       return DOMstrings;
     }
@@ -287,6 +298,7 @@ var controller = (function(budgetCtrl, UICtrl) {
   var setupEventListeners = function() {
     DOM = UICtrl.getDOMstrings();
     $(DOM.inputBtn).on("click", ctrlAddItem);
+    $(DOM.inputType).on("change", UICtrl.changedType);
 
     document.addEventListener("keypress", function(e) {
       if (e.keyCode === 13 || e.which === 13) {
