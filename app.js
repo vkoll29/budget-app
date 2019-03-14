@@ -140,7 +140,39 @@ var UIController = (function() {
     expensesLabel: ".budget__expenses--value",
     expPercLabel: ".budget__expenses--percentage",
     container: ".container",
-    itemPercLabel: ".item__percentage"
+    itemPercLabel: ".item__percentage",
+    monthLabel: ".budget__title--month"
+  };
+
+  /* private function that isn't used outside this controller, that's why not returned*/
+  var formatNumber = function(num, type) {
+    var numSplit, int, dec, type;
+    /**
+     * num should have two decimal places e.g 567.8754 turns to 567.88 & 567 turns to 567.00
+     * num should have commas for numbers in the thousands range e.g 4,356.89
+     * there should be either a + or - sign before num depending on type
+     */
+
+    num = Math.abs(num);
+    num = num.toFixed(2);
+
+    numSplit = num.split(".");
+    int = numSplit[0];
+    if (int.length > 3) {
+      int = int.substr(0, int.length - 3) + "," + int.substr(int.length - 3);
+    }
+    /**
+     * subtr(startposition, length)
+     * substring(startposition, endposition)
+     * in both cases the 2nd argument is optional
+     * when only one argument is given, it returns a portion of the string from the specified position to
+     * the end of the string being extracted from
+     * Additionally, the first argument to substr can be a negative integer,
+     * in which case the start of the returned string is counted from the end of the string that the method is used on
+     */
+    dec = numSplit[1];
+
+    return (type === "inc" ? "+" : "-") + " " + int + "." + dec;
   };
 
   return {
@@ -169,7 +201,7 @@ var UIController = (function() {
       //replace placeholders in html string with some actual data
       newHtml = html.replace("%id%", obj.id);
       newHtml = newHtml.replace("%description%", obj.description);
-      newHtml = newHtml.replace("%value%", obj.value);
+      newHtml = newHtml.replace("%value%", formatNumber(obj.value, type));
 
       //insert html string into the DOM
       // document.querySelector(el).insertAdjacentHTML("beforeend", newHtml);
@@ -194,9 +226,11 @@ var UIController = (function() {
     },
 
     displayBudget: function(obj) {
-      $(DOMstrings.budgetLabel).text(obj.budget);
-      $(DOMstrings.incomeLabel).text(obj.totalInc);
-      $(DOMstrings.expensesLabel).text(obj.totalExp);
+      var type;
+      obj.budget > 0 ? (type = "inc") : (type = "exp");
+      $(DOMstrings.budgetLabel).text(formatNumber(obj.budget, type));
+      $(DOMstrings.incomeLabel).text(formatNumber(obj.totalInc, "inc"));
+      $(DOMstrings.expensesLabel).text(formatNumber(obj.totalExp, "exp"));
       if (obj.percentage > 0) {
         $(DOMstrings.expPercLabel).text(obj.percentage);
       } else {
@@ -220,7 +254,28 @@ var UIController = (function() {
         }
       });
     },
-
+    displayMonth: function() {
+      var now, year, months, month, monthYear;
+      now = new Date();
+      year = now.getFullYear();
+      months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ];
+      month = now.getMonth();
+      monthYear = months[month] + ", " + year;
+      $(DOMstrings.monthLabel).text(monthYear);
+    },
     getDOMstrings: function() {
       return DOMstrings;
     }
@@ -302,6 +357,7 @@ var controller = (function(budgetCtrl, UICtrl) {
   return {
     init: function() {
       console.log("Application has started");
+      UICtrl.displayMonth();
       UICtrl.displayBudget({
         budget: 0,
         totalInc: 0,
