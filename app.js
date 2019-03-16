@@ -72,9 +72,21 @@ var budgetController = (function() {
 
     deleteItem: function(type, id) {
       var ids, index;
-      ids = data.allItems[type].map(function(current) {
-        return current.id;
-      });
+      // ids = data.allItems[type].map(function(current) {
+      //   return current.id;
+      // });
+
+      //CHANGED THE ABOVE FUNCTION TO ARROW FUNCTION
+      /**
+       *  When there is only one parameter, we can remove the surrounding parenthesies:
+       *  When the only statement in an arrow function is return, we can remove return and remove
+       * the surrounding curly brackets
+       */
+      // ids = data.allItems[type].map(current => current.id);
+
+      // DESTRUCTURING PARAMETER --- should learn
+
+      ids = data.allItems[type].map(({ id: current }) => current);
       index = ids.indexOf(id);
       if (index !== -1) {
         data.allItems[type].splice(index, 1);
