@@ -84,7 +84,10 @@ var budgetController = (function() {
        */
       // ids = data.allItems[type].map(current => current.id);
 
-      // DESTRUCTURING PARAMETER --- should learn
+      // DESTRUCTURING PARAMETER
+      /**
+       * used to get values from more complex data structures like arrays and objects
+       */
 
       ids = data.allItems[type].map(({ id: current }) => current);
       index = ids.indexOf(id);
@@ -237,9 +240,7 @@ var UIController = (function() {
       //In ES6, you just use the from method
 
       fieldsArr = Array.from(fields);
-      fieldsArr.forEach(function(current, index, array) {
-        current.value = "";
-      });
+      fieldsArr.forEach(c => (c.value = ""));
       fieldsArr[0].focus();
     },
 

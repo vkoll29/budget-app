@@ -7,7 +7,7 @@ DOne - 1. The colour on income is default black, find out why and change it back
     (ii)Cannot read property 'map' of undefined
         thrown at line js:75
         occurs mainly when you click on the expenses side 
-
+    --- both of these errors occur because there is a click event assigned on the delete button but hardcoded
 2. Find a way to slide misplaced items from one menu side to the other
 3. Create a database for the input
 4. Make it a mobile app
