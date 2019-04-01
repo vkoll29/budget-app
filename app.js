@@ -230,7 +230,13 @@ var UIController = (function() {
         DOMstrings.inputDescription + "," + DOMstrings.inputValue
       );
       // convert the result of queryselectorAll above which is a list into an array
-      fieldsArr = Array.prototype.slice.call(fields);
+      //in ES5 this was done by using the slice method and calling it -- didn't understand how it worked
+
+      /* fieldsArr = Array.prototype.slice.call(fields); */
+
+      //In ES6, you just use the from method
+
+      fieldsArr = Array.from(fields);
       fieldsArr.forEach(function(current, index, array) {
         current.value = "";
       });
